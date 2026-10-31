@@ -2,26 +2,26 @@
 
 import { useEffect, useState, type CSSProperties } from 'react';
 
-// Letras que sobem do livro aberto. Semente fixa: servidor e navegador geram o mesmo HTML.
-function letrasSoltas() {
+// Faixas de luz da "entrada na marca". Semente fixa: servidor e navegador geram o mesmo HTML.
+function faixas() {
   let s = 1922;
   const r = () => ((s = (s * 16807) % 2147483647) - 1) / 2147483646;
-  const pool = 'aeiouçãéêíóõúbcdfglmnprstvALFP&?!«»';
-  return Array.from({ length: 34 }, () => ({
-    ch: pool[Math.floor(r() * pool.length)],
-    st: {
-      '--x': `${((r() * 2 - 1) * 46).toFixed(1)}vw`,
-      '--y': `${(-30 - r() * 45).toFixed(1)}vh`,
-      '--r': `${((r() * 2 - 1) * 70).toFixed(0)}deg`,
-      '--s': (0.7 + r() * 1.6).toFixed(2),
-      '--t': `${(0.9 + r() * 0.9).toFixed(2)}s`,
-    } as CSSProperties,
-  }));
+  const cores = ['#e3b45a', '#f6d48c', '#b8862f', '#7a1f2b', '#a3283a', '#fff1cf'];
+  return Array.from({ length: 46 }, (_, i) => ({
+    '--x': `${((i - 23) * 2.2 + (r() - 0.5) * 1.4).toFixed(2)}vw`,
+    '--w': `${(0.35 + r() * 1.5).toFixed(2)}vw`,
+    '--c': cores[Math.floor(r() * cores.length)],
+    '--d': `${(r() * 0.35).toFixed(2)}s`,
+    '--o': (0.45 + r() * 0.55).toFixed(2),
+  }) as CSSProperties);
 }
-const SOLTAS = letrasSoltas();
-const MARCA = 'LiteraFlix'.split('');
+const FAIXAS = faixas();
 
-/** Abertura: um livro se abre, as letras escapam das páginas e o nome se escreve em dourado. */
+/**
+ * Abertura estilo vinheta de cinema (uns 4 s): tela preta, o nome LiteraFlix
+ * surge com impacto, um brilho dourado atravessa as letras e a câmera mergulha
+ * na marca, que se desfaz em faixas de luz até revelar o site.
+ */
 export function Abertura() {
   const [viva, setViva] = useState(true);
 
@@ -33,7 +33,7 @@ export function Abertura() {
       raiz.classList.add('abertura-fim');
       setViva(false);
     };
-    const t = setTimeout(fim, 4000);
+    const t = setTimeout(fim, 4100);
     const tecla = (e: KeyboardEvent) => { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') fim(); };
     document.addEventListener('keydown', tecla);
     (window as unknown as { __pularAbertura?: () => void }).__pularAbertura = fim;
@@ -43,21 +43,16 @@ export function Abertura() {
   if (!viva) return null;
   return (
     <div id="abertura" className="abertura" aria-hidden="true" onClick={() => (window as unknown as { __pularAbertura?: () => void }).__pularAbertura?.()}>
-      <div className="ab-luz" />
-      <div className="ab-livro">
-        <span className="ab-pagina ab-pagina--e" />
-        <span className="ab-pagina ab-pagina--d" />
-        <span className="ab-capa ab-capa--e" />
-        <span className="ab-capa ab-capa--d" />
-      </div>
-      <div className="ab-soltas">{SOLTAS.map((l, i) => <i key={i} style={l.st}>{l.ch}</i>)}</div>
-      <div className="ab-palco">
+      <div className="ab-halo" />
+      <div className="ab-faixas">{FAIXAS.map((st, i) => <i key={i} style={st} />)}</div>
+      <div className="ab-camera">
         <div className="ab-marca">
-          {MARCA.map((l, i) => <span key={i} className={i >= 6 ? 'ouro' : undefined} style={{ '--i': String(i) } as CSSProperties}>{l}</span>)}
+          <span className="ab-a">Litera</span><span className="ab-b">flix</span>
         </div>
-        <svg className="ab-traco" viewBox="0 0 600 40" fill="none" aria-hidden="true"><path d="M10 26 C120 6 220 36 320 20 S500 8 590 18" /></svg>
-        <p className="ab-slogan">Literatura que vira aula</p>
+        <div className="ab-reflexo" />
       </div>
+      <div className="ab-flash" />
+      <div className="ab-grao" />
       <span className="ab-pular">Clique para pular</span>
     </div>
   );

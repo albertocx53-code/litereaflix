@@ -67,22 +67,22 @@ export function HeroBanner({ itens }: { itens: Titulo[] }) {
             <div className="hero-bg">
               <TitleArt title={t.titulo} art={t.arte} seed={t.slug} imageUrl={t.banner ?? t.capa} variant="fill" showText={false} />
             </div>
-            <div className="hero-ghost" aria-hidden="true">{t.titulo.charAt(0)}</div>
             <div className="hero-shade" />
+            <div className="hero-luz" aria-hidden="true" />
             <div className="dust" aria-hidden="true">{Array.from({ length: 10 }, (_, k) => <i key={k} />)}</div>
             <Link href={`/titulo/${t.slug}`} className="hero-poster" tabIndex={-1} aria-hidden="true">
               <TitleArt title={t.titulo} art={t.arte} seed={t.slug} imageUrl={t.capa} />
               <span className="hero-poster-glare" />
             </Link>
             <div className="hero-content">
-              <div className="hero-kicker"><i />{kicker(t)}</div>
+              <div className="hero-kicker"><b className="hero-selo">LF</b><span>{kicker(t)}</span></div>
               <h1 className={`hero-title${t.titulo.length > 26 ? ' hero-title--longo' : ''}`}>
                 {palavras.map((p, k) => (
                   <Fragment key={k}><span className="w"><span style={{ '--i': String(k) } as CSSProperties}>{p}</span></span>{k < palavras.length - 1 ? ' ' : ''}</Fragment>
                 ))}
               </h1>
               <div className="meta hero-meta">
-                {n === 0 && <span className="novo">Em alta</span>}
+                <span className="novo">Em destaque</span>
                 {t.ano && <span>{t.ano}</span>}
                 {t.duracao && <span>{duracao(t.duracao)}</span>}
                 {t.arte.autor && <span>{t.arte.autor}</span>}
@@ -106,6 +106,7 @@ export function HeroBanner({ itens }: { itens: Titulo[] }) {
         <div className="hero-dots" role="tablist" aria-label="Escolher destaque">
           {itens.map((t, n) => (
             <button key={t.slug} type="button" role="tab" aria-selected={n === i} aria-label={t.titulo} onClick={() => setI(n)}>
+              <span className="hero-mini"><TitleArt title={t.titulo} art={t.arte} seed={t.slug} imageUrl={t.capa} showText={false} /></span>
               <i onAnimationEnd={n === i ? proximo : undefined} />
             </button>
           ))}
