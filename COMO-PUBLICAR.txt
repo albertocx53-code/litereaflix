@@ -1,0 +1,11 @@
+LANDING PAGE ARTFLIX · COMO USAR
+
+1) Abra o index.html num editor de texto e vá até o fim, na parte "EDITE AQUI":
+     precoBasico:      preço do Kit Básico           ex.: "R$ 10,00" (já preenchido)
+     precoCompleto:    preço do Kit Completo         ex.: "R$ 19,90"
+     precoBonus:       preço dos 6 bônus             ex.: "R$ 5,50"
+     checkoutBasico:   link de compra do Kit Básico
+     checkoutBonus:    link de compra dos bônus (aparece na janela do Kit Básico)
+     checkoutCompleto: link de compra do Kit Completo
+2) O que aparece em cada kit está no próprio index.html, na seção "Escolha o seu ingresso".
+3) Publique a pasta inteira (index.html + pasta img) na Vercel/Netlify/seu servidor.
